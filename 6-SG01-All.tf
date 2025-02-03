@@ -2,7 +2,7 @@
 
 #California Security Group
 resource "aws_security_group" "ec2-cali-sg80" {
-  provider = aws.california
+  #provider = aws.california
   vpc_id = aws_vpc.CA_VPC.id 
   /*
   tags = {
@@ -40,7 +40,7 @@ resource "aws_security_group" "ec2-cali-sg80" {
 
 # CALIFORNIA Port 443 Security Group for Load Balancer 443 - add ingress for 443
 resource "aws_security_group" "cali-LB01-sg443" {
-  provider         = aws.california
+  #provider         = aws.california
   name        = "ca_LB01-SG01-443"
   description = "ec2-cali-sg443"
   vpc_id      = aws_vpc.CA_VPC.id
@@ -81,7 +81,7 @@ resource "aws_security_group" "cali-LB01-sg443" {
 
 # CALIFORNIA Port 443 Security Group for Syslog Server 443 - add ingress for 443
 resource "aws_security_group" "ca_SL01-SG01-443" {
-  provider         = aws.california
+  #provider         = aws.california
   name        = "ca_SL01-SG01-443"
   description = "ca_SL01-SG01-443"
   vpc_id      = aws_vpc.CA_VPC.id
