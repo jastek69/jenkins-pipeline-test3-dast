@@ -1,4 +1,5 @@
 # CALIFORNIA TARGET GROUPS for LOAD BALANCER
+/*
 resource "aws_lb_target_group" "ca_lb_tg80" {
   provider = aws.california
   name     = "ca-lb-tg80"
@@ -53,3 +54,4 @@ resource "aws_lb_target_group" "ca_lb_tg443" {
     Project = "TMMC"
   }
 }
+*/
