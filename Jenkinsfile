@@ -17,11 +17,33 @@ pipeline {
                 }
             }
         }
+        
         stage('Checkout Code') {
             steps {
                 git branch: 'main', url: 'https://github.com/jastek69/jenkins-pipeline-test3.git'
             }
         }
+        
+        // DAST
+        stage ("Docker Pull Dastardly from Burp Suite container image") {
+            steps {
+                sh 'docker pull public.ecr.aws/portswigger/dastardly:latest'
+            }
+        }
+
+        stage ("Docker run Dastardly from Burp Suite Scan") {
+            steps {
+                cleanWs()
+                sh '''
+                    docker run --user $(id -u) -v ${WORKSPACE}:${WORKSPACE}:rw \
+                    -e BURP_START_URL=https://ginandjuice.shop/ \
+                    -e BURP_REPORT_FILE_PATH=${WORKSPACE}/dastardly-report.xml \
+                    public.ecr.aws/portswigger/dastardly:latest
+                '''
+            }
+        }
+
+
         stage('Initialize Terraform') {
             steps {
                 sh '''
@@ -29,6 +51,7 @@ pipeline {
                 '''
             }
         }
+
         stage('Plan Terraform') {
             steps {
                 withCredentials([[
@@ -43,6 +66,7 @@ pipeline {
                 }
             }
         }
+
         stage('Apply Terraform') {
             steps {
                 input message: "Approve Terraform Apply?", ok: "Deploy"
@@ -58,13 +82,18 @@ pipeline {
                 }
             }
         }
-    }
+    } // END Stages
+
     post {
+        always {
+            junit testResults: 'dastardly-report.xml', skipPublishingChecks: true
+        }
+
         success {
             echo 'Terraform deployment completed successfully!'
         }
         failure {
             echo 'Terraform deployment failed!'
         }
-    }
-}
+    } // END post
+} // END pipeline
