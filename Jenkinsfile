@@ -20,7 +20,7 @@ pipeline {
         
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/jastek69/jenkins-pipeline-test3.git'
+                git branch: 'main', url: 'https://github.com/jastek69/jenkins-pipeline-test3-dast.git'
             }
         }
         
